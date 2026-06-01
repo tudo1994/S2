@@ -17,7 +17,6 @@ import {
   last,
   memoize,
   some,
-  values,
 } from 'lodash';
 import { BaseCell } from '../cell';
 import {
@@ -862,7 +861,16 @@ export abstract class SpreadSheet extends EE {
 
       return ctx.measureText(String(text));
     },
-    (text: SimpleData, font) => [text, ...values(font)].join(''),
+    (text: SimpleData, font: unknown) => {
+      if (!font) {
+        return String(text);
+      }
+
+      const { fontSize, fontFamily, fontWeight, fontStyle, fontVariant } =
+        font as CSSStyleDeclaration;
+
+      return `${fontSize}${fontFamily}${fontWeight}${fontStyle}${fontVariant}${text}`;
+    },
   );
 
   /**
