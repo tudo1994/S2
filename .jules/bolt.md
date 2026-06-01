@@ -1,0 +1,3 @@
+## 2024-06-01 - Expensive cache key generators in hot loops
+**Learning:** `lodash.memoize`'s custom resolver/key generator can become a bottleneck if it uses expensive operations like `Object.values` and spreads on objects, especially when called hundreds of thousands of times during tight layout loops (e.g., text measurement). This also inadvertently reduces cache hits if properties irrelevant to the output (like text color for measureText) are included.
+**Action:** When using `memoize` on functions called frequently, ensure the key generation logic is explicitly optimized, O(1) time complexity, and only includes exactly the parameters that affect the function's output. String concatenation of strictly required properties is much faster than object iterations.
