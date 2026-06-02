@@ -21,41 +21,6 @@ export const isNotNumber = (value: unknown) => {
 export const canConvertToNumber = (a?: string | number) => !isNotNumber(a);
 
 /**
- * 预处理原始数据为 Decimal 对象数组
- * 所有不能转为 number 的数据默认为 0
- * @param data 原始数据数组
- * @param field 值字段
- * @param filterIllegalValue 是否过滤非法值？过滤后，包装后的数据数组短于原始数组长度
- * @returns 经过 Decimal 包装后的值数组
- */
-const processFieldValues = (
-  data: ViewMetaData[],
-  field: string,
-  filterIllegalValue = false,
-) => {
-  if (!data?.length) {
-    return [];
-  }
-
-  return data.reduce<Array<Decimal>>((resultArr, item) => {
-    const fieldValue = CellData.getFieldValue(item, field) as string | number;
-
-    const notNumber = isNotNumber(fieldValue);
-
-    if (filterIllegalValue && notNumber) {
-      // 过滤非法值
-      return resultArr;
-    }
-
-    const val = notNumber ? 0 : fieldValue;
-
-    resultArr.push(new Decimal(val));
-
-    return resultArr;
-  }, []);
-};
-
-/**
  * 计算数据项的和
  * @param data 数据项
  * @param field 值字段
@@ -65,13 +30,23 @@ export const getDataSumByField = (
   data: ViewMetaData[],
   field: string,
 ): number => {
-  const fieldValues = processFieldValues(data, field);
-
-  if (!fieldValues.length) {
+  if (!data?.length) {
     return 0;
   }
 
-  return Decimal.sum(...fieldValues).toNumber();
+  let sum = new Decimal(0);
+
+  for (let i = 0; i < data.length; i++) {
+    const fieldValue = CellData.getFieldValue(data[i], field) as
+      | string
+      | number;
+    const notNumber = isNotNumber(fieldValue);
+    const val = notNumber ? 0 : fieldValue;
+
+    sum = sum.plus(val);
+  }
+
+  return sum.toNumber();
 };
 
 /**
@@ -86,14 +61,37 @@ export const getDataExtremumByField = (
   data: ViewMetaData[],
   field: string,
 ): number | undefined => {
-  // 防止预处理时默认值 0 影响极值结果，处理时需过滤非法值
-  const fieldValues = processFieldValues(data, field, true);
-
-  if (!fieldValues?.length) {
+  if (!data?.length) {
     return;
   }
 
-  return Decimal[method](...fieldValues).toNumber();
+  let extremum: Decimal | undefined;
+
+  for (let i = 0; i < data.length; i++) {
+    const fieldValue = CellData.getFieldValue(data[i], field) as
+      | string
+      | number;
+    const notNumber = isNotNumber(fieldValue);
+
+    // 防止预处理时默认值 0 影响极值结果，处理时需过滤非法值
+    if (!notNumber) {
+      const val = new Decimal(fieldValue);
+
+      if (extremum === undefined) {
+        extremum = val;
+      } else if (method === 'max') {
+        if (val.greaterThan(extremum)) {
+          extremum = val;
+        }
+      } else if (method === 'min') {
+        if (val.lessThan(extremum)) {
+          extremum = val;
+        }
+      }
+    }
+  }
+
+  return extremum?.toNumber();
 };
 
 /**
@@ -106,15 +104,29 @@ export const getDataAvgByField = (
   data: ViewMetaData[],
   field: string,
 ): number => {
-  const fieldValues = processFieldValues(data, field);
-
-  if (!fieldValues?.length) {
+  if (!data?.length) {
     return 0;
   }
 
-  return Decimal.sum(...fieldValues)
-    .dividedBy(fieldValues.length)
-    .toNumber();
+  let sum = new Decimal(0);
+  let count = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const fieldValue = CellData.getFieldValue(data[i], field) as
+      | string
+      | number;
+    const notNumber = isNotNumber(fieldValue);
+    const val = notNumber ? 0 : fieldValue;
+
+    sum = sum.plus(val);
+    count++;
+  }
+
+  if (count === 0) {
+    return 0;
+  }
+
+  return sum.dividedBy(count).toNumber();
 };
 
 /**
