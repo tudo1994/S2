@@ -1,0 +1,3 @@
+## 2024-06-03 - Event Listener Thrashing in React Hooks
+**Learning:** In the `@antv/s2-react` component, event hooks like `useCellEvent` and `useS2Event` passed event handlers directly as dependencies to `useLayoutEffect`. Since these handlers are often generated dynamically during render by parents (or higher order components), it caused excessive and expensive event unbinding (`off`) and rebinding (`on`) on the spreadsheet instance every time the component re-rendered.
+**Action:** Use the `useLatest` hook from `ahooks` to preserve a mutable ref to the latest event handler callback without including it in the `useLayoutEffect` dependency array. This prevents unnecessary hook teardown and setup while still ensuring the latest function is called when the event fires.
