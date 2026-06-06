@@ -40,20 +40,21 @@ export const getSeriesNumberNodes = (
 };
 
 const getAllParents = (nodes: Node[]) => {
-  const parents = nodes.reduce((pre, leaf) => {
+  const parentIdSet = new Set<string>();
+  const parents: Node[] = [];
+
+  nodes.forEach((leaf) => {
     let parent = leaf.parent;
 
     while (parent && parent.id !== ROOT_NODE_ID) {
-      // eslint-disable-next-line no-loop-func
-      if (!pre.find((node) => node.id === parent!.id)) {
-        pre.push(parent);
+      if (!parentIdSet.has(parent.id)) {
+        parentIdSet.add(parent.id);
+        parents.push(parent);
       }
 
       parent = parent.parent;
     }
-
-    return pre;
-  }, [] as Node[]);
+  });
 
   return parents;
 };
