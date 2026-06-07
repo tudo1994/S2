@@ -1,0 +1,3 @@
+## 2024-06-12 - Event listener optimization in useEvents
+**Learning:** React hooks that bind event listeners to third-party libraries (like `@antv/s2`) should use `useLatest` (or similar refs) for user-provided callbacks. Passing functions as dependencies to `useEffect`/`useLayoutEffect` causes frequent unbinding and rebinding of DOM/Canvas events if the user provides inline functions, hurting performance significantly (especially with ~80 events).
+**Action:** Always wrap user-provided callbacks in `useLatest` when binding them to external event emitters inside `useEffect`/`useLayoutEffect`, keeping the handler out of the dependency array.
