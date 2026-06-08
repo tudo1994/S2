@@ -1,0 +1,3 @@
+## 2024-06-15 - React Event Listener Re-binding Bottleneck
+**Learning:** In `@antv/s2-react`, passing callback functions from props directly into `useLayoutEffect` dependency arrays for S2 event listeners (`useCellEvent`, `useS2Event`) causes the application to constantly unbind and rebind all events on every re-render because props functions are not usually memoized by the consumer.
+**Action:** Use `ahooks`'s `useLatest` to keep a stable reference to the callback, and remove the callback from the `useLayoutEffect` dependency array. This ensures event handlers always access the latest closures without unnecessary unbinding and rebinding.
