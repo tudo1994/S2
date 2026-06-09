@@ -1,0 +1,3 @@
+## 2024-06-09 - S2-React Unnecessary Event Listener Re-binding
+**Learning:** Using inline, non-memoized functions as event handler props in S2 React components causes `React.useLayoutEffect` to trigger frequently because the function reference changes on every render. This leads to continuous `s2.off()` and `s2.on()` calls, severely impacting performance.
+**Action:** When creating custom React hooks for integrating generic event emitters (like `@antv/s2`), always wrap incoming callbacks in a stable ref using a library like `ahooks` (`useLatest`) or standard `React.useRef`. Do not depend on the callback prop directly in the dependency array of the effect doing the event binding.
