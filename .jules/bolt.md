@@ -1,0 +1,3 @@
+## 2024-06-10 - Tree Traversal Performance Anti-pattern
+**Learning:** `Array.prototype.shift()` and `Array.prototype.unshift()` inside iterative traversal loops like `while` (which were used in core layout utility functions such as `getAllLeaveNodes` and `getAllChildrenNodes` for AntV S2 facet nodes) operate at O(V^2) quadratic time complexity since all remaining elements must be re-indexed on every removal/addition. Deeply nested tables process large amounts of nodes, exacerbating this performance bottleneck.
+**Action:** Replace iterative queue operations leveraging `shift()`/`unshift()` with recursive DFS functions (using `.forEach` loop over child items) for structural tree traversal to regain linear O(V) performance.

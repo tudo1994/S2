@@ -173,19 +173,15 @@ export class Node {
       return [node];
     }
 
-    // current root node children
-    const nodes = [...(node.children || [])];
-    let current = nodes.shift();
-
-    while (current) {
-      if (current.isLeaf) {
-        leaves.push(current);
+    const traverse = (n: Node) => {
+      if (n.isLeaf) {
+        leaves.push(n);
       } else {
-        nodes.unshift(...current.children);
+        n.children?.forEach(traverse);
       }
+    };
 
-      current = nodes.shift();
-    }
+    node.children?.forEach(traverse);
 
     return leaves;
   }
@@ -214,15 +210,12 @@ export class Node {
       return all;
     }
 
-    // current root node children
-    const nodes = [...(node.children || [])];
-    let current = nodes.shift();
+    const traverse = (n: Node) => {
+      all.push(...push(n));
+      n.children?.forEach(traverse);
+    };
 
-    while (current) {
-      all.push(...push(current));
-      nodes.unshift(...current.children);
-      current = nodes.shift();
-    }
+    node.children?.forEach(traverse);
 
     return all;
   }
