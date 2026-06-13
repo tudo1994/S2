@@ -7,6 +7,7 @@ import {
   type EmitterType,
   type TargetCellInfo,
 } from '@antv/s2';
+import { useLatest } from 'ahooks';
 import React from 'react';
 import type { SheetComponentProps } from '../components';
 
@@ -15,9 +16,14 @@ export const useCellEvent = (
   handler: ((data: TargetCellInfo) => void) | undefined,
   s2: SpreadSheet,
 ) => {
+  // ⚡ Bolt Performance Optimization:
+  // Use `useLatest` to keep a reference to the latest handler without triggering
+  // a re-bind of the event listener on every render when an unmemoized inline function is passed.
+  const handlerRef = useLatest(handler);
+
   React.useLayoutEffect(() => {
     const handlerFn = (event: GEvent) => {
-      handler?.(getBaseCellData(event, s2));
+      handlerRef.current?.(getBaseCellData(event, s2));
     };
 
     s2?.on(eventName, handlerFn);
@@ -25,7 +31,7 @@ export const useCellEvent = (
     return () => {
       s2?.off(eventName, handlerFn);
     };
-  }, [s2, handler, eventName]);
+  }, [s2, eventName]);
 };
 
 export const useS2Event = (
@@ -34,9 +40,13 @@ export const useS2Event = (
   s2: SpreadSheet,
   emitBeforeOff = false,
 ) => {
+  // ⚡ Bolt Performance Optimization:
+  // Use `useLatest` to prevent event thrashing for unmemoized event handlers.
+  const handlerRef = useLatest(handler);
+
   React.useLayoutEffect(() => {
     const handlerFn: EmitterType[S2Event] = (...args: any[]) => {
-      handler?.(...args);
+      handlerRef.current?.(...args);
     };
 
     s2?.on(eventName, handlerFn);
@@ -48,7 +58,7 @@ export const useS2Event = (
 
       s2?.off(eventName, handlerFn);
     };
-  }, [s2, handler, eventName]);
+  }, [s2, eventName, emitBeforeOff]);
 };
 
 export function useEvents(props: SheetComponentProps, s2: SpreadSheet) {

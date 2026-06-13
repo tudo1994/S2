@@ -1,0 +1,3 @@
+## 2026-06-13 - [Performance] Event Thrashing in React Wrapper
+**Learning:** In wrapper libraries like `@antv/s2-react`, passing unmemoized event handlers (e.g., inline functions) to components often triggers unnecessary teardown and re-attachment of underlying event listeners (like `.on()` and `.off()` methods on the core instance) on every render, leading to significant performance degradation.
+**Action:** Always use the `useLatest` hook (or equivalent `useEvent` pattern) to keep a stable reference to event handlers, preventing them from causing `useEffect` or `useLayoutEffect` to fire repeatedly while still ensuring the latest closure variables are accessed when the event is triggered.
