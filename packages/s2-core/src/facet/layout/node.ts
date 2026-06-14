@@ -174,17 +174,18 @@ export class Node {
     }
 
     // current root node children
-    const nodes = [...(node.children || [])];
-    let current = nodes.shift();
+    const nodes = [...(node.children || [])].reverse();
 
-    while (current) {
-      if (current.isLeaf) {
+    while (nodes.length > 0) {
+      const current = nodes.pop();
+
+      if (current?.isLeaf) {
         leaves.push(current);
-      } else {
-        nodes.unshift(...current.children);
+      } else if (current?.children) {
+        for (let i = current.children.length - 1; i >= 0; i--) {
+          nodes.push(current.children[i]);
+        }
       }
-
-      current = nodes.shift();
     }
 
     return leaves;
@@ -215,13 +216,19 @@ export class Node {
     }
 
     // current root node children
-    const nodes = [...(node.children || [])];
-    let current = nodes.shift();
+    const nodes = [...(node.children || [])].reverse();
 
-    while (current) {
-      all.push(...push(current));
-      nodes.unshift(...current.children);
-      current = nodes.shift();
+    while (nodes.length > 0) {
+      const current = nodes.pop();
+
+      if (current) {
+        all.push(...push(current));
+        if (current.children) {
+          for (let i = current.children.length - 1; i >= 0; i--) {
+            nodes.push(current.children[i]);
+          }
+        }
+      }
     }
 
     return all;
