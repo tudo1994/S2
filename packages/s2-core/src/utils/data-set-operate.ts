@@ -1,4 +1,4 @@
-import { flattenDeep, isArray } from 'lodash';
+import { isArray } from 'lodash';
 import {
   EMPTY_EXTRA_FIELD_PLACEHOLDER,
   TOTAL_VALUE,
@@ -49,7 +49,22 @@ export const customFlattenDeep = (
     return [data];
   }
 
-  return flattenDeep(data);
+  const result: any[] = [];
+  const stack = [...data].reverse();
+
+  while (stack.length > 0) {
+    const next = stack.pop();
+
+    if (isArray(next)) {
+      for (let i = next.length - 1; i >= 0; i--) {
+        stack.push(next[i]);
+      }
+    } else {
+      result.push(next);
+    }
+  }
+
+  return result;
 };
 
 /**
