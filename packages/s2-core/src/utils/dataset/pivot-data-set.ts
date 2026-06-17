@@ -67,17 +67,21 @@ export function transformDimensionsValues(
   dimensions: string[] = [],
   placeholder = TOTAL_VALUE,
 ): string[] {
-  return dimensions.reduce((res: string[], dimension: string) => {
-    const value = record[dimension];
+  // Performance optimization: Pre-allocate array and use for-loop instead of reduce() + push()
+  // This function is called in a tight loop during data transformation
+  const result = new Array(dimensions.length);
+
+  for (let i = 0; i < dimensions.length; i++) {
+    const dimension = dimensions[i];
 
     if (!(dimension in record)) {
-      res.push(placeholder);
+      result[i] = placeholder;
     } else {
-      res.push(generateNillString(value as string));
+      result[i] = generateNillString(record[dimension] as string);
     }
+  }
 
-    return res;
-  }, []);
+  return result as string[];
 }
 
 export function getExistValues(data: RawData, values: string[]) {
@@ -98,21 +102,25 @@ function transformDimensionsValuesWithExtraFields(
   const result = [];
 
   function transform(data: RawData, fields: string[], valueField?: string) {
-    return fields.reduce((res: string[], dimension: string) => {
-      const value = data[dimension];
+    // Performance optimization: Pre-allocate array and use for-loop instead of reduce() + push()
+    // This function is called in a tight loop during data transformation
+    const result = new Array(fields.length);
+
+    for (let i = 0; i < fields.length; i++) {
+      const dimension = fields[i];
 
       if (!(dimension in data)) {
         if (dimension === EXTRA_FIELD && valueField) {
-          res.push(valueField);
+          result[i] = valueField;
         } else {
-          res.push(TOTAL_VALUE);
+          result[i] = TOTAL_VALUE;
         }
       } else {
-        res.push(generateNillString(value as string));
+        result[i] = generateNillString(data[dimension] as string);
       }
+    }
 
-      return res;
-    }, []);
+    return result as string[];
   }
 
   if (values) {
