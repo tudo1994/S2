@@ -1,0 +1,3 @@
+## 2024-06-20 - Prevent S2 Event Binding Thrashing in React Wrapper
+**Learning:** In the `@antv/s2-react` wrapper, binding S2 events using React `useLayoutEffect` with inline handler functions as dependencies causes severe performance overhead. Due to React component re-renders generating new inline handler function references, `s2.off()` and `s2.on()` are needlessly triggered repeatedly for over 70 events on every render.
+**Action:** Use `ahooks` hook `useLatest` to capture the latest handler function without adding it to the `useLayoutEffect` dependency array. This guarantees that event teardown and setup only occur when the S2 instance or the event name actually changes, while still correctly executing the most up-to-date handler logic.
