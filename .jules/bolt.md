@@ -1,0 +1,3 @@
+## 2024-06-25 - React Hook Event Binding Bottleneck
+**Learning:** In `@antv/s2-react`, passing inline functions or unmemoized functions to sheet components triggers continuous tear-down and setup of all `S2` event listeners inside the `useEvents` hook. Because `handler` was part of the `useLayoutEffect` dependencies, the effect continuously unbinds and rebinds all native canvas events.
+**Action:** Use `ahooks`'s `useLatest(handler)` to store a stable ref of the handler callback. This ensures we always execute the most recent handler while preventing the effect from re-running, avoiding expensive re-binding operations on the canvas core `SpreadSheet` instance.
