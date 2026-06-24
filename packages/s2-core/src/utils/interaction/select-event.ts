@@ -1,4 +1,4 @@
-import { groupBy, map, mapValues, reduce, uniqBy } from 'lodash';
+import { groupBy, map, mapValues, uniqBy } from 'lodash';
 import { HeaderCell, TableSeriesNumberCell } from '../../cell';
 import { CellType, InteractionKeyboardKey } from '../../common/constant';
 import type {
@@ -116,7 +116,7 @@ export const getInteractionCells = (
 
   const selectedHeaderCells = headerGetters
     .filter((item) => item.shouldGet)
-    .reduce((acc: Node[], i) => [...acc, ...i.getter(cell.id, s2)], [])
+    .flatMap((i) => i.getter(cell.id, s2))
     .filter((node) => !!node.belongsCell)
     .map((node) => getCellMeta(node.belongsCell!));
 
@@ -127,14 +127,11 @@ export const getInteractionCellsBySelectedCells = (
   selectedCells: CellMeta[],
   s2: SpreadSheet,
 ): Array<CellMeta> => {
-  const headerSelectedCell: CellMeta[] = reduce(
-    selectedCells,
-    (_cells: CellMeta[], selectedCell) => [
-      ..._cells,
-      ...getInteractionCells(selectedCell, s2),
-    ],
-    [],
-  );
+  const headerSelectedCell: CellMeta[] = [];
+
+  selectedCells.forEach((selectedCell) => {
+    headerSelectedCell.push(...getInteractionCells(selectedCell, s2));
+  });
 
   // headerSelectedCell 会有重复的 cell，在这里统一去重
   return uniqBy([...selectedCells, ...headerSelectedCell], 'id');
