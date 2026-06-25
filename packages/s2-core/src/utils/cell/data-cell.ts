@@ -1,4 +1,4 @@
-import { forEach, isEqual } from 'lodash';
+import { forEach } from 'lodash';
 import type { DataCell } from '../../cell';
 import {
   CellType,
@@ -16,7 +16,7 @@ import type { SpreadSheet } from '../../sheet-type';
 export const includeCell = (cells: CellMeta[], currentCell: S2CellType) => {
   const currentId = currentCell.getMeta().id;
 
-  return cells.some((cell) => isEqual(cell.id, currentId));
+  return cells.some((cell) => cell.id === currentId);
 };
 
 export const getDataCellId = (rowId: string, colId: string) => {

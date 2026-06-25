@@ -314,8 +314,10 @@ export const differenceTempMergedCells = (
   mainTempMergedCells: TempMergedCell[],
   compareTempMergedCells: TempMergedCell[],
 ): TempMergedCell[] =>
-  differenceWith(mainTempMergedCells, compareTempMergedCells, (main, compare) =>
-    isEqual(main.viewMeta.id, compare.viewMeta.id),
+  differenceWith(
+    mainTempMergedCells,
+    compareTempMergedCells,
+    (main, compare) => main.viewMeta.id === compare.viewMeta.id,
   );
 
 /**
@@ -367,8 +369,9 @@ export const updateMergedCells = (
 
   // remove old MergedCells
   forEach(removeTempMergedCells, (tempMergedCell) => {
-    const oldMergedCell = find(oldMergedCells, (mergedCell) =>
-      isEqual(mergedCell.getMeta().id, tempMergedCell.viewMeta.id),
+    const oldMergedCell = find(
+      oldMergedCells,
+      (mergedCell) => mergedCell.getMeta().id === tempMergedCell.viewMeta.id,
     );
 
     oldMergedCell?.remove();
