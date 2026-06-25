@@ -1,5 +1,5 @@
 import type { PointLike } from '@antv/g';
-import { find, first, get, isEmpty, isEqual, isObject, merge } from 'lodash';
+import { find, first, get, isEmpty, isObject, merge } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import { ContentPositionParams } from '../common';
 import { EMPTY_PLACEHOLDER } from '../common/constant/basic';
@@ -187,9 +187,9 @@ export class DataCell extends BaseCell<ViewMeta> {
 
     // fix issue: https://github.com/antvis/S2/issues/1781
     if (
-      isEqual(hoverCellMeta.id, id) &&
-      isEqual(hoverCellMeta.rowIndex, rowIndex) &&
-      isEqual(hoverCellMeta.colIndex, colIndex)
+      hoverCellMeta.id === id &&
+      hoverCellMeta.rowIndex === rowIndex &&
+      hoverCellMeta.colIndex === colIndex
     ) {
       this.updateByState(InteractionStateName.HOVER_FOCUS);
     }
