@@ -1,0 +1,3 @@
+## 2024-03-24 - Expensive lodash operations in hot paths
+**Learning:** `lodash.merge` and `lodash.cloneDeep` are frequently used in hot paths like cell background resolution (`getBackgroundColor` in base cells) and brush interaction configuration creation. These functions carry a significant performance overhead due to their recursive deep-traversals and type checking logic.
+**Action:** When working with flat objects or simple multi-level configurations in hot rendering paths within `@antv/s2-core` and similar packages, replace `lodash.merge` and `lodash.cloneDeep` with native ES6 object spread syntax (e.g., `{ ...a, ...b }` and `{ x: { ...obj.x }, y: { ...obj.y } }`).
