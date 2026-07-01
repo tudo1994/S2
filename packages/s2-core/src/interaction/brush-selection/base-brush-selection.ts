@@ -4,7 +4,7 @@ import {
   type DisplayObject,
   type PointLike,
 } from '@antv/g';
-import { cloneDeep, isEmpty, isNil, map, throttle } from 'lodash';
+import { isEmpty, isNil, map, throttle } from 'lodash';
 import { ColCell, DataCell, RowCell } from '../../cell';
 import {
   FRONT_GROUND_GROUP_BRUSH_SELECTION_Z_INDEX,
@@ -204,9 +204,10 @@ export class BaseBrushSelection
     rect1.minY < rect2.maxY &&
     rect1.maxY > rect2.minY;
 
-  protected autoScrollConfig: BrushAutoScrollConfig = cloneDeep(
-    BRUSH_AUTO_SCROLL_INITIAL_CONFIG,
-  );
+  protected autoScrollConfig: BrushAutoScrollConfig = {
+    x: { ...BRUSH_AUTO_SCROLL_INITIAL_CONFIG.x },
+    y: { ...BRUSH_AUTO_SCROLL_INITIAL_CONFIG.y },
+  };
 
   public validateYIndex = (yIndex: number) => {
     const { facet } = this.spreadsheet;
@@ -562,7 +563,10 @@ export class BaseBrushSelection
   }
 
   protected resetScrollDelta() {
-    this.autoScrollConfig = cloneDeep(BRUSH_AUTO_SCROLL_INITIAL_CONFIG);
+    this.autoScrollConfig = {
+      x: { ...BRUSH_AUTO_SCROLL_INITIAL_CONFIG.x },
+      y: { ...BRUSH_AUTO_SCROLL_INITIAL_CONFIG.y },
+    };
   }
 
   protected getBrushPoint(event: CanvasEvent): BrushPoint {
