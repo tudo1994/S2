@@ -1,0 +1,7 @@
+## 2024-06-19 - Avoid lodash.merge for Cell Styles
+**Learning:** In a highly interactive data grid/table library like `@antv/s2`, using heavy deep-merge utility functions like `lodash.merge` within cell styling computation functions (`DataCell`, `HeaderCell`, `RowCell`) introduces significant performance overhead, as these are hot paths called thousands of times per render. Native object spread syntax is sufficiently fast and achieves the same functional outcome for these flat style objects.
+**Action:** Replace `lodash.merge` with native object spread (`...`) when merging flat configuration/styling objects in high-frequency rendering paths to reduce computation time without sacrificing functionality. Always check if the merged objects are flat before making this optimization to ensure correctness.
+
+## 2024-06-19 - Environment Dependencies Issue
+**Learning:** Re-installing or installing dependencies in the monorepo root or specific packages can sometimes result in `electron` being added as a massive unused dependency due to environment/peer dependency issues locally, which severely inflates bundle sizes and modifies `package.json`/`pnpm-lock.yaml` unintentionally.
+**Action:** Exercise extreme caution when running `pnpm install`. Always review Git diffs for `package.json` and `pnpm-lock.yaml` before committing to ensure bloated or unrelated dependencies like `electron` have not been inadvertently added. Revert those changes immediately.
