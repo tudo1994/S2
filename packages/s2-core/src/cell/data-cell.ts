@@ -1,5 +1,5 @@
 import type { PointLike } from '@antv/g';
-import { find, first, get, isEmpty, isEqual, isObject, merge } from 'lodash';
+import { find, first, get, isEmpty, isEqual, isObject } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import { ContentPositionParams } from '../common';
 import { EMPTY_PLACEHOLDER } from '../common/constant/basic';
@@ -428,10 +428,14 @@ export class DataCell extends BaseCell<ViewMeta> {
       };
     }
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.conditionFill,
-    );
+    // ⚡ Bolt Performance Optimization:
+    // Replaced lodash.merge with native object spread for flat configuration objects.
+    // Expected impact: Faster cell rendering as it avoids deep iteration overhead in lodash.merge, especially with thousands of cells.
+    return {
+      backgroundColor,
+      backgroundColorOpacity,
+      ...this.conditionFill,
+    };
   }
 
   // dataCell 根据 state 改变当前样式，
