@@ -1,5 +1,5 @@
 import type { PointLike } from '@antv/g';
-import { find, get, merge } from 'lodash';
+import { find, get } from 'lodash';
 import {
   CellType,
   FrozenGroupArea,
@@ -74,10 +74,14 @@ export class RowCell extends HeaderCell<RowHeaderConfig> {
     const { backgroundColor, backgroundColorOpacity } =
       this.getCrossBackgroundColor(this.meta.rowIndex);
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.getBackgroundConditionFill(),
-    );
+    // ⚡ Bolt Performance Optimization:
+    // Replaced lodash.merge with native object spread for flat configuration objects.
+    // Expected impact: Faster cell rendering as it avoids deep iteration overhead in lodash.merge.
+    return {
+      backgroundColor,
+      backgroundColorOpacity,
+      ...this.getBackgroundConditionFill(),
+    };
   }
 
   /**

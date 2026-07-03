@@ -12,7 +12,6 @@ import {
   isEmpty,
   isEqual,
   map,
-  merge,
 } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import {
@@ -465,10 +464,14 @@ export abstract class HeaderCell<
     const { backgroundColor, backgroundColorOpacity } =
       this.getStyle()?.cell || {};
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.getBackgroundConditionFill(),
-    );
+    // ⚡ Bolt Performance Optimization:
+    // Replaced lodash.merge with native object spread for flat configuration objects.
+    // Expected impact: Faster cell rendering as it avoids deep iteration overhead in lodash.merge.
+    return {
+      backgroundColor,
+      backgroundColorOpacity,
+      ...this.getBackgroundConditionFill(),
+    };
   }
 
   public toggleActionIcon(id: string) {
