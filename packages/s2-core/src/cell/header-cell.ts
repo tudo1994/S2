@@ -12,7 +12,6 @@ import {
   isEmpty,
   isEqual,
   map,
-  merge,
 } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import {
@@ -465,10 +464,12 @@ export abstract class HeaderCell<
     const { backgroundColor, backgroundColorOpacity } =
       this.getStyle()?.cell || {};
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.getBackgroundConditionFill(),
-    );
+    // Use native object spread for better rendering performance
+    return {
+      backgroundColor,
+      backgroundColorOpacity,
+      ...this.getBackgroundConditionFill(),
+    };
   }
 
   public toggleActionIcon(id: string) {
