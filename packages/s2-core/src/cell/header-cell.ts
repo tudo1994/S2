@@ -12,7 +12,6 @@ import {
   isEmpty,
   isEqual,
   map,
-  merge,
 } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import {
@@ -465,10 +464,13 @@ export abstract class HeaderCell<
     const { backgroundColor, backgroundColorOpacity } =
       this.getStyle()?.cell || {};
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.getBackgroundConditionFill(),
-    );
+    // Performance optimization: use native object spread instead of lodash.merge
+    // for flat object cloning, avoiding deep recursive checks and improving render speed.
+    return {
+      backgroundColor,
+      backgroundColorOpacity,
+      ...this.getBackgroundConditionFill(),
+    };
   }
 
   public toggleActionIcon(id: string) {
