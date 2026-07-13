@@ -1,5 +1,5 @@
 import type { PointLike } from '@antv/g';
-import { find, first, get, isEmpty, isEqual, isObject, merge } from 'lodash';
+import { find, first, get, isEmpty, isEqual, isObject } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import { ContentPositionParams } from '../common';
 import { EMPTY_PLACEHOLDER } from '../common/constant/basic';
@@ -428,10 +428,14 @@ export class DataCell extends BaseCell<ViewMeta> {
       };
     }
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.conditionFill,
-    );
+    // Performance: Object spread + nullish coalescing avoids expensive deep merge operation
+    return {
+      backgroundColor: this.conditionFill?.backgroundColor ?? backgroundColor,
+      backgroundColorOpacity:
+        this.conditionFill?.backgroundColorOpacity ?? backgroundColorOpacity,
+      intelligentReverseTextColor:
+        this.conditionFill?.intelligentReverseTextColor ?? false,
+    };
   }
 
   // dataCell 根据 state 改变当前样式，
