@@ -1,0 +1,3 @@
+## 2024-05-24 - Replace lodash.merge with object spread
+**Learning:** `lodash.merge` ignores `undefined` source values, while object spread overwrites existing properties with `undefined`. When replacing `lodash.merge` with object spread (`...`), leverage the nullish coalescing operator (`??`) to conditionally merge keys only when they are not undefined to safely mimic `lodash.merge`'s behavior without clobbering existing values. This is particularly relevant when merging styling configurations like cell styles.
+**Action:** Always use nullish coalescing when converting `lodash.merge` to object spread in styling configurations to avoid overwriting with undefined.
