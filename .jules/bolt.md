@@ -1,0 +1,3 @@
+## 2024-07-15 - Replace lodash.merge with native properties assignment for Cell getBackgroundColor
+**Learning:** `lodash.merge` on flat cell style objects (like `backgroundColor` and `backgroundColorOpacity`) is a major performance bottleneck during the massive cell rendering iterations in s2-core, due to the overhead of deep merging properties.
+**Action:** When migrating from `lodash.merge` to object spread or property assignments (`??`), ensure to use the nullish coalescing operator (`??`) to conditionally merge keys only when they are not undefined. This safely mimics `lodash.merge`'s behavior of ignoring undefined properties without clobbering existing values, optimizing rendering performance significantly.
