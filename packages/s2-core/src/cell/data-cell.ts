@@ -428,10 +428,15 @@ export class DataCell extends BaseCell<ViewMeta> {
       };
     }
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.conditionFill,
-    );
+    const conditionFill = this.conditionFill;
+
+    // ⚡ Bolt: Replace lodash.merge with nullish coalescing for performance.
+    // Avoids expensive deep clone operations on flat style objects during rendering.
+    return {
+      backgroundColor: conditionFill?.backgroundColor ?? backgroundColor,
+      backgroundColorOpacity: conditionFill?.backgroundColorOpacity ?? backgroundColorOpacity,
+      intelligentReverseTextColor: conditionFill?.intelligentReverseTextColor ?? false,
+    };
   }
 
   // dataCell 根据 state 改变当前样式，
