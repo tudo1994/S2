@@ -1,0 +1,3 @@
+refactor: replace lodash.merge with native object spread for rendering performance
+
+Replaced the usage of `lodash.merge` in `getBackgroundColor` across `DataCell`, `HeaderCell`, and `RowCell` with native object spread and nullish coalescing to avoid deep cloning and recursive traversal penalties during high-frequency cell rendering.
