@@ -1,0 +1,3 @@
+## 2024-07-23 - Avoid lodash merge for hot path style getters
+**Learning:** `lodash.merge` is expensive for simple shallow property overwriting. In cell classes (`DataCell`, `HeaderCell`, `RowCell`), `getBackgroundColor` calls `lodash.merge` on every cell render, which degrades rendering performance. Native spread syntax works perfectly for simple defaults fallback `conditionFill?.prop ?? defaultProp` when fallback is required due to spread's overwriting behavior with explicit `undefined`s.
+**Action:** Replace `lodash.merge` with object spread and nullish coalescing operators for simple style/config object fallbacks within hot paths like cell getters, taking care to preserve the correct fallback logic when `undefined` might be spread.
