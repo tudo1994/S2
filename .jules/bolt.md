@@ -1,0 +1,3 @@
+## 2024-06-25 - Lodash Merge vs Spread in Style Getters
+**Learning:** `lodash.merge` is very expensive when evaluating inline styles inside highly repetitive paths (like cell rendering). While it is great at deep-merging, cells typically only need shallow merges of conditional overrides onto default backgrounds.
+**Action:** Replace `lodash.merge` with object spread (`...`) and nullish coalescing (`??`) for flat objects when generating cell styles in high-frequency paths. Ensure nullish coalescing handles properties carefully by checking the object isn't undefined before accessing the target keys (e.g., `conditionFill?.backgroundColor`).
