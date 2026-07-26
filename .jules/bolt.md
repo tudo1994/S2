@@ -1,0 +1,3 @@
+## 2024-06-18 - Replacing lodash.merge with native fallback
+**Learning:** `lodash.merge` is notoriously slow because it performs a recursive, deep-merge algorithm. In data grid libraries where cell classes are instantiated and rendered hundreds or thousands of times, this can be a bottleneck. Replacing it with native object literals and nullish coalescing/logical OR operators provides a significant speedup for flat configuration objects.
+**Action:** Always prefer native object spread or fallback operators over `lodash.merge` or `lodash.cloneDeep` when combining flat style configurations in hot paths like `getBackgroundColor()` or `getBBox()`.

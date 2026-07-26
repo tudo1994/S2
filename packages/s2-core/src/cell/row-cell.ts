@@ -1,5 +1,5 @@
 import type { PointLike } from '@antv/g';
-import { find, get, merge } from 'lodash';
+import { find, get } from 'lodash';
 import {
   CellType,
   FrozenGroupArea,
@@ -74,10 +74,15 @@ export class RowCell extends HeaderCell<RowHeaderConfig> {
     const { backgroundColor, backgroundColorOpacity } =
       this.getCrossBackgroundColor(this.meta.rowIndex);
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.getBackgroundConditionFill(),
-    );
+    const conditionFill = this.getBackgroundConditionFill();
+
+    return {
+      backgroundColor: conditionFill?.backgroundColor ?? backgroundColor,
+      backgroundColorOpacity:
+        conditionFill?.backgroundColorOpacity ?? backgroundColorOpacity,
+      intelligentReverseTextColor:
+        conditionFill?.intelligentReverseTextColor ?? false,
+    };
   }
 
   /**
