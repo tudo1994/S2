@@ -1,0 +1,3 @@
+## 2024-11-20 - lodash.merge bottlenecks on cell styling
+**Learning:** `lodash.merge` is incredibly heavy when called thousands of times per render loop (like computing `getBackgroundColor()` on every cell update), creating significant frontend CPU lag in table components. Object spread is substantially faster but handles `undefined` source values differently than `lodash.merge`.
+**Action:** When replacing `lodash.merge` with object spread for configuration overrides, always spread the conditionally merged object first and manually enforce fallback logic using `??` (e.g., `backgroundColor: conditionFill?.backgroundColor ?? defaultColor`) to safely mimic `merge`'s handling of `undefined` while skipping its execution overhead.
