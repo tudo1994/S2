@@ -1,0 +1,3 @@
+## 2024-05-16 - Replace lodash.merge with native object spread in cell style getters
+**Learning:** `lodash.merge` is notoriously slow for simple object merging because it recursively traverses properties, prototype chains, and checks for circular references. When merging cell styles like backgrounds, which are called thousands of times per render for cells, replacing `lodash.merge` with native object spread `...` and nullish coalescing `??` yields massive performance gains in render loops.
+**Action:** When working on performance optimizations in hot loops (e.g. methods in DataCell, RowCell, HeaderCell), avoid `lodash.merge` when merging plain objects. Always use native object spread `...` and nullish coalescing `??` for simple object properties.
