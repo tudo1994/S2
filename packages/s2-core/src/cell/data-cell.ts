@@ -1,5 +1,5 @@
 import type { PointLike } from '@antv/g';
-import { find, first, get, isEmpty, isEqual, isObject, merge } from 'lodash';
+import { find, first, get, isEmpty, isEqual, isObject } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import { ContentPositionParams } from '../common';
 import { EMPTY_PLACEHOLDER } from '../common/constant/basic';
@@ -428,10 +428,14 @@ export class DataCell extends BaseCell<ViewMeta> {
       };
     }
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.conditionFill,
-    );
+    // ⚡ Bolt: Replace lodash.merge with native object spread for flat styles to improve rendering performance.
+    // Spread conditionFill first, then safely fallback to the original values if they were undefined in conditionFill.
+    return {
+      ...this.conditionFill,
+      backgroundColor: this.conditionFill?.backgroundColor ?? backgroundColor,
+      backgroundColorOpacity:
+        this.conditionFill?.backgroundColorOpacity ?? backgroundColorOpacity,
+    };
   }
 
   // dataCell 根据 state 改变当前样式，
