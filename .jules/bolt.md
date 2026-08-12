@@ -1,0 +1,3 @@
+## 2024-05-18 - Replacing lodash.merge with native object spread for config objects
+**Learning:** `lodash.merge` is significantly slower than native object spread (`...`) for combining flat configuration objects like cell styles. This is a common performance bottleneck in the codebase when applied to many cells during rendering.
+**Action:** When merging flat style configurations (like those returned by `getBackgroundConditionFill`), prefer native object spread `...` and nullish coalescing `??` over `lodash.merge` to avoid expensive function calls on every cell render. Ensure to conditionally check fallback properties (e.g., `backgroundColor: conditionFill?.backgroundColor ?? backgroundColor`).
