@@ -1,0 +1,4 @@
+## 2025-03-05 - Safe replacement of lodash.merge with spread operator
+**Learning:** When replacing `lodash.merge` with object spread (`...`) for configuration objects like cell styles (e.g., `conditionFill`), it's crucial to consider that `lodash.merge` inherently ignores properties with `undefined` values, keeping the target's original values, whereas the spread operator will explicitly overwrite a target's property with `undefined` if the source object has it set.
+
+**Action:** When manually writing the replacement spread logic (e.g., `{ ...conditionFill, prop: conditionFill?.prop ?? fallback }`), spread the conditionally merged object first, then safely assign individual properties with nullish coalescing to prevent fallback properties from being incorrectly overwritten with `undefined`.
