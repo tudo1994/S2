@@ -1,0 +1,3 @@
+## 2024-05-18 - Replacing lodash.merge with native object spread
+**Learning:** `lodash.merge` ignores `undefined` source values whereas object spread overwrites existing properties with `undefined` if the source key holds `undefined`. Also `lodash.merge` is expensive due to deep traversal and object allocation which affects rendering performance where `getBackgroundColor` gets called many times. Replacing `lodash.merge` with object spread alongside nullish coalescing safely provides defaults without the performance overhead.
+**Action:** Remove `lodash.merge` and use native object spread `...` with `??` when providing defaults. Spreading the condition object first and safely falling back to original color string maintains proper precedence without redundant cloning.
