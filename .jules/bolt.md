@@ -1,0 +1,3 @@
+## 2024-05-18 - `lodash.merge` vs Object Spread for Styles
+**Learning:** `lodash.merge` is expensive for simple object combinations, particularly in performance-critical paths like rendering loops (e.g., cell styles like `getBackgroundColor`). Object spread syntax combined with the nullish coalescing operator (`??`) is significantly faster and achieves the same result when merging default objects with fallback properties conditionally.
+**Action:** Use native object spread and `??` to replace `lodash.merge` in hot paths like cell getters. Ensure to use optional chaining when safely accessing conditional properties to prevent TypeErrors, e.g., `{ ...conditionFill, backgroundColor: conditionFill?.backgroundColor ?? backgroundColor }`.
