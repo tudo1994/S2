@@ -1,0 +1,3 @@
+## 2024-05-24 - Lodash merge vs Object Spread in high-frequency getters
+**Learning:** `lodash.merge` is a deep merge utility that does type checking, circular reference checking, and iteration. Using it in getters that are called thousands of times per render cycle (like cell styling in S2) creates a significant CPU bottleneck.
+**Action:** Replace `lodash.merge` with native object spread (`...`) and nullish coalescing (`??`) for flat configuration objects to drastically reduce overhead in hot paths. Ensure defensive optional chaining is used (e.g., `conditionFill?.backgroundColor`) when applying fallbacks.
