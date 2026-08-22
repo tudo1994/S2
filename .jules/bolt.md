@@ -1,0 +1,3 @@
+## 2024-05-19 - Replace lodash.merge with Object Spread in Getters
+**Learning:** In `@antv/s2-core`, using `lodash.merge` in highly frequent getters like `getBackgroundColor` creates a measurable rendering bottleneck. Conditional styles omit missing properties rather than returning `undefined`, enabling the safe replacement of `lodash.merge` with native object spread (`...`) and nullish coalescing (`??`) without behavior changes.
+**Action:** When merging default properties with configuration objects (like conditional fills), prioritize using object spread with nullish coalescing. Remember to spread the conditional object first (e.g., `{ ...condition, prop: condition?.prop ?? default }`) to avoid unintended overwrites by `undefined` values during the spread.
