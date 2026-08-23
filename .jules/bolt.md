@@ -1,0 +1,3 @@
+## 2024-05-19 - Replace lodash.merge with native object spread
+**Learning:** `lodash.merge` is significantly slower than native object spread, especially when invoked continuously per-cell in the rendering pipeline of `s2-core` (like `getBackgroundColor`). However, naive replacement can cause bugs because `lodash.merge` ignores `undefined` sources, while native spread will overwrite existing values with `undefined`.
+**Action:** When replacing `lodash.merge` with object spread for style merging, conditionally extract properties utilizing optional chaining (`?.`) and fallback using nullish coalescing (`??`) to perfectly match the `merge` behavior and prevent `undefined` properties from overriding valid base styles.
