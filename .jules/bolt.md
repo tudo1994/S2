@@ -1,0 +1,3 @@
+## 2026-08-25 - Replaced lodash.merge with object spread
+**Learning:** Using `lodash.merge` on every cell render for `DataCell` and `RowCell` creates unnecessary overhead. Native object spread with nullish coalescing (`??`) achieves the same conditional fallbacks much faster, improving rendering performance in the `@antv/s2` packages. Also, when reconstructing object assignment from `groupBy` like in `groupIconsByPosition`, using bracket notation (e.g. `grouped['left']`) avoids TS4111 indexing errors.
+**Action:** Always prefer native object spread (`...`) and nullish coalescing (`??`) over `lodash.merge` or `cloneDeep` when merging simple configuration objects, especially in high-frequency rendering functions like `getBackgroundColor`.
