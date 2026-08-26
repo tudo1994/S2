@@ -1,0 +1,3 @@
+## 2024-05-18 - Replacing lodash.merge with native object spread for cell styles
+**Learning:** `lodash.merge` on flat style objects in frequently called cell getters like `getBackgroundColor` causes significant rendering overhead in large spreadsheets.
+**Action:** Use native object spread (`...`) and nullish coalescing (`??`) with optional chaining for conditional styles (e.g. `{ ...conditionFill, backgroundColor: conditionFill?.backgroundColor ?? fallback }`). Note that `lodash.merge` ignores `undefined` sources, so the conditional style must be spread first, and then properties must be safely coalesced to avoid overriding defaults with `undefined`.
