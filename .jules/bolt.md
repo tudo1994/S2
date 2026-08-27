@@ -1,0 +1,3 @@
+## 2024-05-24 - Cell Style merge Optimization
+**Learning:** In `@antv/s2-core`, rendering cells is a very hot path. Combining cell style configurations (like background color and opacity) using `lodash.merge` is expensive due to deep object checking overhead. Since style configurations are flat objects, `lodash.merge` is unnecessary.
+**Action:** Replace `lodash.merge` with object spread (`...`) and nullish coalescing (`??`) for combining default styles with conditional styles in cell `getBackgroundColor` methods. This avoids deep traversal while still handling `undefined` properties exactly like `merge` (which ignores them).
