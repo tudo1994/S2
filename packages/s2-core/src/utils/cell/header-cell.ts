@@ -1,4 +1,4 @@
-import { find, groupBy, isEmpty, isEqual, merge } from 'lodash';
+import { find, groupBy, isEmpty, isEqual } from 'lodash';
 import { CellType, EXTRA_FIELD } from '../../common/constant';
 import type {
   HeaderActionNameOptions,
@@ -124,13 +124,14 @@ export const groupIconsByPosition = (
   icons: HeaderActionNameOptions[] = [],
   conditionIcon?: HeaderActionNameOptions,
 ) => {
-  const groupedIcons = merge(
-    {
-      left: [],
-      right: [],
-    },
-    groupBy(icons, 'position'),
-  ) as GroupedIcons;
+  const grouped = groupBy(icons, 'position');
+
+  // ⚡ Bolt: Avoided lodash.merge for assigning pre-grouped arrays to keys.
+  // Impact: Eliminates redundant deep merging operations during header rendering for faster initialization.
+  const groupedIcons: GroupedIcons = {
+    left: grouped['left'] || [],
+    right: grouped['right'] || [],
+  };
 
   // 基于 condition icon 和 value 是强关联的，所以最好将 condition icon 放在 value 的左右侧
   if (conditionIcon) {
