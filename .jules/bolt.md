@@ -1,0 +1,3 @@
+## 2024-11-23 - [Optimization: Remove lodash.merge for Cell Rendering]
+**Learning:** [Replacing `lodash.merge` with native object spread and nullish coalescing for flat style objects in highly frequently called cell render methods significantly improves performance overhead.]
+**Action:** [Always use native syntax instead of `lodash.merge` when merging flat configuration/style objects, especially in hot execution paths like cell rendering.]
