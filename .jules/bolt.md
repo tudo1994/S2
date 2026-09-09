@@ -1,0 +1,3 @@
+## 2024-06-18 - Replacing lodash.merge with Native Spreads
+**Learning:** Using `lodash.merge` for simple styling overrides (like `conditionFill`) adds massive overhead when executed hundreds/thousands of times during grid rendering. Native ES6 spreads (using optional chaining and nullish coalescing) are vastly faster. Be careful that native object spreads overwrite with `undefined`, whereas `lodash.merge` ignores it, so defensively order spreads and coalesce values safely.
+**Action:** Prefer native spreads over `lodash.merge` for shallow/flat style or configuration resolution during cell rendering in S2.
