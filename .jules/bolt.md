@@ -1,0 +1,3 @@
+## 2024-06-12 - Avoid lodash.merge in hot rendering paths
+**Learning:** `lodash.merge` is too heavy for simple, flat object merging in extremely hot execution paths like cell rendering (`getBackgroundColor` in cells). When rendering thousands of cells, `merge` introduces measurable overhead because of its recursive checks and cloning behavior.
+**Action:** Replace `lodash.merge` with object spread (`...`) and the nullish coalescing operator (`??`) when merging simple, flat style configurations. Ensure fallback values are correctly coalesced, bearing in mind that object spread overwrites properties with `undefined`, whereas `lodash.merge` ignores `undefined` source values.
