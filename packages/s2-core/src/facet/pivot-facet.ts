@@ -10,7 +10,6 @@ import {
   map,
   max,
   maxBy,
-  merge,
   reduce,
   size,
   sumBy,
@@ -128,7 +127,7 @@ export class PivotFacet extends FrozenFacet {
         }
       : {};
 
-    const dataQuery = merge({}, rowQuery, colQuery, measureInfo) as Query;
+    const dataQuery = { ...rowQuery, ...colQuery, ...measureInfo } as Query;
     const valueField = dataQuery[EXTRA_FIELD]!;
 
     return {
