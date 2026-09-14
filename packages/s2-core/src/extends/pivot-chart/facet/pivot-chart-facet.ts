@@ -17,16 +17,7 @@ import {
   type SelectedIds,
   type ViewMeta,
 } from '@antv/s2';
-import {
-  concat,
-  floor,
-  get,
-  isEmpty,
-  isNumber,
-  last,
-  merge,
-  sum,
-} from 'lodash';
+import { concat, floor, get, isEmpty, isNumber, last, sum } from 'lodash';
 import {
   KEY_GROUP_COL_AXIS_RESIZE_AREA,
   KEY_GROUP_ROW_AXIS_RESIZE_AREA,
@@ -523,7 +514,7 @@ export class PivotChartFacet extends PivotFacet {
 
         const totalStatus = getHeaderTotalStatus(rowChild, colChild);
 
-        const dataQuery = merge({}, rowQuery, colQuery);
+        const dataQuery = { ...rowQuery, ...colQuery };
         const current = dataSet.getCellData({
           query: dataQuery,
           isTotals,
