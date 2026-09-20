@@ -1,0 +1,3 @@
+## 2024-05-18 - Replacing lodash.merge with Object Spread
+**Learning:** `lodash.merge` ignores `undefined` values during deep merging, but native object spread (`...`) overwrites existing properties with `undefined` if the spread source contains them.
+**Action:** When refactoring `lodash.merge` to object spread in the context of fallback values (e.g. `backgroundColor: conditionFill?.backgroundColor ?? fallback`), ensure that properties from the spread source are overridden after the spread, not before. The final structured object should be `{ ...source, key: source?.key ?? fallback }` instead of `{ key: fallback, ...source }`.
