@@ -1,0 +1,3 @@
+## 2024-05-20 - Fast Flat Object Merging in Cell Renderers
+**Learning:** `lodash.merge` ignores `undefined` properties, while native object spreading (`...`) overwrites properties with `undefined` values. When replacing `lodash.merge` with object spreading for performance in `s2-core`'s cell rendering logic, we must use nullish coalescing (`??`) correctly to replicate the original `lodash.merge` behavior, ensuring that `undefined` values don't overwrite intended fallbacks.
+**Action:** Always spread the conditionally merged object first, then use nullish coalescing for fallback properties (e.g., `{ ...conditionFill, backgroundColor: conditionFill?.backgroundColor ?? fallback }`). This ensures safe fallback when the source object has `undefined` properties.
