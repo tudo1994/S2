@@ -1,0 +1,3 @@
+## 2024-06-15 - [lodash.merge Performance in Cell Styling]
+**Learning:** In highly iterated functions like `getBackgroundColor` inside cell rendering (`DataCell`, `RowCell`, `HeaderCell`), using `lodash.merge` to combine small configuration objects incurs a significant performance penalty compared to native object spread. This is a critical pattern because cell styling logic can be called thousands of times per interaction.
+**Action:** Replace `lodash.merge` with native object spread (`...`) and nullish coalescing (`??`) for flat style objects in cell components to boost rendering speed. Always ensure fallback objects are spread first.
