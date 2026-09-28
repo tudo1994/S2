@@ -1,0 +1,3 @@
+## 2024-05-24 - Avoiding lodash.merge for Cell Styles
+**Learning:** In `@antv/s2-core`, conditional style getters (e.g., `getBackgroundConditionFill()`) omit missing properties instead of explicitly returning `undefined`. This is a specific pattern that allows us to safely bypass expensive `lodash.merge` calls during the render loop (which are a bottleneck) and instead use native object spread (`...`) with the nullish coalescing operator (`??`).
+**Action:** When combining default and conditional cell styles, always use `{ ...conditionFill, prop: conditionFill?.prop ?? defaultProp }` instead of `lodash.merge`.

@@ -1,0 +1,7 @@
+💡 What: Replaced `lodash.merge` with object spread and nullish coalescing in `getBackgroundColor` across `data-cell.ts`, `header-cell.ts`, and `row-cell.ts`. Also optimized `groupIconsByPosition` in `packages/s2-core/src/utils/cell/header-cell.ts` to use `lodash.groupBy` and standard property access instead of `lodash.merge`. Removed unused `merge` imports.
+
+🎯 Why: `lodash.merge` is computationally expensive and performs deep cloning and value checks. In a data grid where rendering iterates over hundreds or thousands of cells continuously, these method calls become a performance bottleneck. Conditional styles were already omitting explicitly `undefined` keys, which safely allows us to use the nullish coalescing operator for defaults, significantly improving execution time on the hot render path.
+
+📊 Impact: Reduces CPU time in the render path for cell style merging, leading to faster scroll performance, cell hovering, and overall rendering speeds, particularly with massive datasets.
+
+🔬 Measurement: Profile the main thread execution time during scrolling and rendering a large data grid. The time spent in `getBackgroundColor` and `groupIconsByPosition` should decrease noticeably.
