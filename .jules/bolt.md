@@ -1,0 +1,3 @@
+## 2025-05-18 - Remove lodash.merge from Cell Background Color Getters for Better Performance
+**Learning:** `lodash.merge` ignores `undefined` properties, while native Object Spread (`...`) overrides properties with `undefined` when using it to merge styles (specifically, for getters like `getBackgroundConditionFill()`). This pattern of merging default backgrounds with conditional backgrounds happens extensively, running for every data/row/header cell during render.
+**Action:** Replace `lodash.merge` with Object Spread and Nullish Coalescing (`??`) to avoid `lodash.merge`'s computational overhead during cell creation. Be careful to apply fallback properties conditionally when spreading!
