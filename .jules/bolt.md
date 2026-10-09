@@ -1,0 +1,3 @@
+## 2024-05-14 - Performance Overhead of lodash.merge on Style Objects
+**Learning:** In highly repetitive rendering paths like grid cells (`@antv/s2-core`), using `lodash.merge` to combine flat configuration style objects (e.g., `backgroundColor`, `opacity`) incurs high overhead due to deep cloning and type checks.
+**Action:** Replace `lodash.merge` with native object spread (`...`) and nullish coalescing (`??`) for flat config objects when safe to do so. Ensure defensive coding is used (e.g., `conditionFill?.property ?? default`) to replicate lodash's behavior of ignoring undefined properties safely.
