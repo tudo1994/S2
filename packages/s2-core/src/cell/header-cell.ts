@@ -12,7 +12,6 @@ import {
   isEmpty,
   isEqual,
   map,
-  merge,
 } from 'lodash';
 import { BaseCell } from '../cell/base-cell';
 import {
@@ -465,10 +464,16 @@ export abstract class HeaderCell<
     const { backgroundColor, backgroundColorOpacity } =
       this.getStyle()?.cell || {};
 
-    return merge(
-      { backgroundColor, backgroundColorOpacity },
-      this.getBackgroundConditionFill(),
-    );
+    const conditionFill = this.getBackgroundConditionFill();
+
+    // ⚡ Bolt Performance Optimization: Replace expensive lodash.merge with fast native spread & nullish coalescing
+    // to improve render/hover performance across thousands of grid cells
+    return {
+      ...conditionFill,
+      backgroundColor: conditionFill?.backgroundColor ?? backgroundColor,
+      backgroundColorOpacity:
+        conditionFill?.backgroundColorOpacity ?? backgroundColorOpacity,
+    };
   }
 
   public toggleActionIcon(id: string) {
