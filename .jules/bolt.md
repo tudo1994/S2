@@ -1,0 +1,3 @@
+## 2025-02-14 - Spread object vs lodash.merge for style objects
+**Learning:** lodash.merge is computationally expensive compared to object spread and nullish coalescing. When conditional style getters like `getBackgroundConditionFill()` return objects that typically omit missing properties instead of returning undefined, they can be safely merged using `{ ...conditionFill, color: conditionFill?.color ?? defaultColor }`. Ensure the conditionally merged object is spread *first* so its properties aren't overwritten by the defaults when `undefined`.
+**Action:** Replace lodash.merge with native object spread + nullish coalescing for flat style merging to improve performance, spreading the conditionally merged object first.
