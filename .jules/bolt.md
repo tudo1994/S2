@@ -1,0 +1,3 @@
+## 2024-05-24 - Replace lodash.merge with native object spread for cell styles
+**Learning:** `lodash.merge` has performance overhead for deep cloning and merging, especially when called repeatedly in cell getters (like `getBackgroundColor`). Native object spread with nullish coalescing (`??`) can safely accomplish the same result much faster for shallow configuration objects, provided we construct the return correctly: `backgroundColor: conditionFill?.backgroundColor ?? backgroundColor`.
+**Action:** Replace `lodash.merge` in `packages/s2-core/src/cell/header-cell.ts`, `packages/s2-core/src/cell/data-cell.ts`, and `packages/s2-core/src/cell/row-cell.ts` where it merges `backgroundColor` and `conditionFill`.
