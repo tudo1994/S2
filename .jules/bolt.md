@@ -1,0 +1,3 @@
+## 2024-10-30 - Replace lodash.merge with object spread
+**Learning:** In `@antv/s2-core`, heavy deep-cloning or deep-merging functions like `lodash.merge` are unnecessary for combining simple flat configuration objects (e.g., condition fill styles). They introduce a measurable overhead on the hot path (cell rendering). Native object spreading and nullish coalescing (`??`) are functionally equivalent here (as `lodash.merge` ignores `undefined`) and drastically faster.
+**Action:** Replace `lodash.merge` with object spreading and nullish coalescing for flat style merging, ensuring the conditional object is spread *first* to avoid overwriting safe coalesced fallbacks with `undefined`.
