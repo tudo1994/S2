@@ -1,0 +1,3 @@
+## 2024-05-24 - lodash.merge on hot paths
+**Learning:** `lodash.merge` is expensive when run repeatedly on hot paths (like cell rendering style calculations) because of its type checks and deep cloning logic. Object spread (`...`) with nullish coalescing (`??`) provides identical behavior for flat fallback objects (handling `undefined` natively) but is significantly faster.
+**Action:** Replace `lodash.merge` with object spreading and optional chaining (`??`) for flat configurations, ensuring the conditional fallback object is spread first so explicitly defined fallbacks are not overwritten by `undefined` source values.
